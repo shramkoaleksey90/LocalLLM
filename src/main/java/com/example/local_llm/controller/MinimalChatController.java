@@ -1,4 +1,4 @@
-package com.example.demo.controller;
+package com.example.local_llm.controller;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.ollama.OllamaChatModel;
