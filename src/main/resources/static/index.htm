@@ -1,37 +1,75 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Ollama Chat</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ollama Chat Interface</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<h1>Ollama Chat</h1>
-<textarea id="message" placeholder="Type your message here..." rows="4" cols="50"></textarea><br><br>
-<button onclick="sendMessage()">Send</button>
-<br><br>
-<div id="response" style="border: 1px solid #ccc; padding: 10px; min-height: 100px; background: #f9f9f9;"></div>
+<div class="container">
+    <header>
+        <h1>🤖 Ollama Chat Interface</h1>
+        <div class="stats">
+            <span id="messageCount">Messages: 0</span>
+            <span id="lastResponseTime">Last response: 0ms</span>
+        </div>
+    </header>
 
-<script>
-    function sendMessage() {
-        const message = document.getElementById('message').value;
-        const responseDiv = document.getElementById('response');
+    <main>
+        <div class="chat-container">
+            <div id="chatHistory" class="chat-history"></div>
 
-        responseDiv.innerHTML = 'Sending...';
+            <div class="input-section">
+                    <label for="messageInput">Enter your message:</label>
+                    <textarea id="messageInput"
+                              placeholder="Type your message here..."
+                              rows="3"
+                              maxlength="1000"></textarea>
+                <div class="controls">
+                    <button id="settingsButton">Settings</button>
+                    <button id="sendButton" onclick="sendMessage()">
+                        <span id="buttonText">Send</span>
+                        <span id="loadingSpinner" class="spinner hidden">⏳</span>
+                    </button>
+                    <button id="clearButton" onclick="clearChat()">Clear Chat</button>
+                </div>
+                <div class="char-counter">
+                    <span id="charCount">0</span>/1000 characters
+                </div>
+            </div>
+        </div>
+    </main>
 
-        fetch('/chat', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'text/plain',
-            },
-            body: message
-        })
-            .then(response => response.text())
-            .then(data => {
-                responseDiv.innerHTML = '<strong>Response:</strong><br>' + data;
-            })
-            .catch(error => {
-                responseDiv.innerHTML = '<strong>Error:</strong><br>' + error;
-            });
-    }
-</script>
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal hidden">
+        <div class="modal-content">
+            <h2>Llama 3 Settings</h2>
+            <!-- todo add processing logic for llama settings -->
+            <label>
+                Temperature:
+                <input id="temperatureSpinner" type="number" min="0" max="2" step="0.01" value="0.7">
+            </label>
+            <label>
+                Top-p:
+                <input id="topPSpinner" type="number" min="0" max="1" step="0.01" value="0.9">
+            </label>
+            <label>
+                Num Predict:
+                <input id="numPredictSpinner" type="number" min="1" max="4096" step="1" value="500">
+            </label>
+            <div class="modal-actions">
+                <button id="closeSettingsButton" type="button">Close</button>
+            </div>
+        </div>
+    </div>
+    <!-- End Settings Modal -->
+
+    <footer>
+        <p>Built with Meta Llama 3</p>
+    </footer>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
